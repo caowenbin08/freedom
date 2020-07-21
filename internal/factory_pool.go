@@ -52,10 +52,11 @@ func (pool *FactoryPool) diFactory(entity interface{}) {
 		if value.Kind() == reflect.Ptr && value.IsZero() {
 			ok, newfield := pool.get(value.Type())
 			if !ok {
+				globalApp.Logger().Debugf("[freedom]No dependency injection was found for the object,%v", value.Type().String())
 				return
 			}
 			if !value.CanSet() {
-				globalApp.IrisApp.Logger().Fatal("The member variable must be publicly visible, Its type is " + value.Type().String())
+				globalApp.IrisApp.Logger().Fatalf("[freedom]This use factory object must be a capital variable, %v" + value.Type().String())
 			}
 			//创建实例并且注入基础设施组件和资源库
 			value.Set(newfield)
@@ -76,7 +77,7 @@ func (pool *FactoryPool) diFactory(entity interface{}) {
 					continue
 				}
 				if !value.CanSet() {
-					globalApp.IrisApp.Logger().Fatal("The member variable must be publicly visible, Its type is " + value.Type().String())
+					globalApp.IrisApp.Logger().Fatalf("[freedom]This use factory object must be a capital variable, %v", value.Type().String())
 				}
 				//创建实例并且注入基础设施组件和资源库
 				factoryObj := newfield.Interface()
@@ -84,6 +85,7 @@ func (pool *FactoryPool) diFactory(entity interface{}) {
 				globalApp.rpool.diRepo(factoryObj)
 				return
 			}
+			globalApp.Logger().Debugf("[freedom]No dependency inversions were found for the object,%v", value.Type().String())
 		}
 	})
 }

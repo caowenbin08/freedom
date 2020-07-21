@@ -68,7 +68,7 @@ func (pool *ServicePool) bind(t reflect.Type, f interface{}) {
 		New: func() interface{} {
 			values := reflect.ValueOf(f).Call([]reflect.Value{})
 			if len(values) == 0 {
-				panic("BindService func return to empty")
+				globalApp.Logger().Fatalf("[freedom]BindService: func return to empty, %v", reflect.TypeOf(f))
 			}
 
 			newService := values[0].Interface()
@@ -87,7 +87,7 @@ func (pool *ServicePool) malloc(t reflect.Type) interface{} {
 	}
 	newSercice := syncpool.Get()
 	if newSercice == nil {
-		panic("BindService func return to empty")
+		globalApp.Logger().Fatalf("[freedom]BindService: func return to empty, %v", t)
 	}
 	return newSercice
 }
