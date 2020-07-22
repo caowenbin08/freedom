@@ -30,6 +30,7 @@ func (pool *ServicePool) get(rt *worker, service interface{}) {
 	var newService interface{}
 	newService = pool.malloc(ptr.Type())
 	if newService == nil {
+		globalApp.IrisApp.Logger().Fatalf("[freedom]No dependency injection was found for the service object,%v", ptr.Type())
 		panic("newService is nil")
 	}
 

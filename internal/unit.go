@@ -36,7 +36,24 @@ func (u *UnitTestImpl) GetRepository(repository interface{}) {
 	value := reflect.ValueOf(repository).Elem()
 	ok, newfield := globalApp.rpool.get(value.Type())
 	if !ok {
-		panic("not found")
+		globalApp.IrisApp.Logger().Fatalf("[freedom]No dependency injection was found for the object,%v", value.Type().String())
+	}
+	if !value.CanSet() {
+		globalApp.IrisApp.Logger().Fatalf("[freedom]This use repository object must be a capital variable, %v" + value.Type().String())
+	}
+
+	br, ok := newfield.Interface().(BeginRequest)
+	if ok {
+		br.BeginRequest(u.rt)
+	}
+	value.Set(newfield)
+}
+
+func (u *UnitTestImpl) GetFactory(factory interface{}) {
+	value := reflect.ValueOf(factory).Elem()
+	ok, newfield := globalApp.factoryPool.get(value.Type())
+	if !ok {
+		globalApp.IrisApp.Logger().Fatalf("[freedom]No dependency injection was found for the object,%v", value.Type().String())
 	}
 	if !value.CanSet() {
 		globalApp.IrisApp.Logger().Fatalf("[freedom]This use repository object must be a capital variable, %v" + value.Type().String())
