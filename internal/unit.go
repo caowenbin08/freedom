@@ -39,7 +39,7 @@ func (u *UnitTestImpl) GetRepository(repository interface{}) {
 		panic("not found")
 	}
 	if !value.CanSet() {
-		globalApp.IrisApp.Logger().Fatal("The member variable must be publicly visible, Its type is " + value.Type().String())
+		globalApp.IrisApp.Logger().Fatalf("[freedom]This use repository object must be a capital variable, %v" + value.Type().String())
 	}
 
 	br, ok := newfield.Interface().(BeginRequest)
