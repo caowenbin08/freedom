@@ -79,6 +79,7 @@ func (pool *FactoryPool) diFactory(entity interface{}) {
 					globalApp.IrisApp.Logger().Fatalf("[freedom]This use factory object must be a capital variable: %v", value.Type().String())
 				}
 				//创建实例并且注入基础设施组件和资源库
+				value.Set(newfield)
 				factoryObj := newfield.Interface()
 				globalApp.comPool.diInfra(factoryObj)
 				globalApp.rpool.diRepo(factoryObj)
